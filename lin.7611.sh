@@ -9,16 +9,16 @@ if [ ! -f "$ENV_FILE" ]; then
   exit 1
 fi
 export $(grep -v '^#' "$ENV_FILE" | xargs)
-if [ -z "$TARGET_DIR" ] || [ -z "$DAYS" ] || [ -z "$LOG_FILE" ]; then
-  echo "[$(date '+%Y-%m-%d %H:%M:%S')] ERROR: Missing required parameters in .env (TARGET_DIR, DAYS or LOG_FILE)" >> /tmp/error.log
+if [ -z "$TAR_DIR" ] || [ -z "$DAYS" ] || [ -z "$LOG_FILE" ]; then
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] ERROR: Missing required parameters in .env (TAR_DIR, DAYS or LOG_FILE)" >> /tmp/error.log
   exit 1
 fi
-if [ ! -d "$TARGET_DIR" ]; then
-  echo "[$(date '+%Y-%m-%d %H:%M:%S')] ERROR: Target directory not found: $TARGET_DIR" >> "$LOG_FILE"
+if [ ! -d "$TAR_DIR" ]; then
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] ERROR: Target directory not found: $TAR_DIR" >> "$LOG_FILE"
   exit 1
 fi
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting cleanup: deleting files older than $DAYS days in $TARGET_DIR" >> "$LOG_FILE"
-DELETED_FILES=$(find "$TARGET_DIR" -type f -mtime +$DAYS -exec rm -v {} \; 2>>"$LOG_FILE")
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting cleanup: deleting files older than $DAYS days in $TAR_DIR" >> "$LOG_FILE"
+DELETED_FILES=$(find "$TAR_DIR" -type f -mtime +$DAYS -exec rm -v {} \; 2>>"$LOG_FILE")
 if [ -z "$DELETED_FILES" ]; then
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] Cleanup completed. No files were deleted." >> "$LOG_FILE"
 else
